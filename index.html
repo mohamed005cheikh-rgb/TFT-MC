@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="htmlRoot">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title id="pageTitle">TFT_HTML - تحويل النصوص إلى HTML</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ============================================================
+                   ROOT VARIABLES & THEMES (من الكود الأول)
+                   ============================================================ */
+        :root {
+            --bg-main: #0a0e1a;
+            --bg-panel: rgba(255, 255, 255, 0.04);
+            --bg-element: rgba(255, 255, 255, 0.07);
+            --bg-hover: rgba(255, 255, 255, 0.13);
+            --bg-active: rgba(255, 255, 255, 0.18);
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --text-dim: #64748b;
+            --accent: #60a5fa;
+            --accent-hover: #3b82f6;
+            --accent-glow: rgba(96, 165, 250, 0.15);
+            --success: #34d399;
+            --success-hover: #10b981;
+            --danger: #f87171;
+            --danger-hover: #ef4444;
+            --warning: #fbbf24;
+            --border: rgba(255, 255, 255, 0.06);
+            --border-light: rgba(255, 255, 255, 0.1);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.2);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --radius-full: 9999px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --font-ar: 'Cairo', system-ui, sans-serif;
+            --font-en: 'Inter', system-ui, sans-serif;
+        }
+
+        /* ===== THEMES (من الكود الأول) ===== */
+        [data-theme="ocean"] {
+            --bg-main: #0a1628;
+            --bg-panel: rgba(14, 165, 233, 0.05);
+            --bg-element: rgba(14, 165, 233, 0.1);
+            --bg-hover: rgba(14, 165, 233, 0.18);
+            --bg-active: rgba(14, 165, 233, 0.25);
+            --text-main: #e0f2fe;
+            --text-muted: #7dd3fc;
+            --accent: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --accent-glow: rgba(56, 189, 248, 0.15);
+            --success: #2dd4bf;
+            --border: rgba(14, 165, 233, 0.12);
+            --border-light: rgba(14, 165, 233, 0.2);
+        }
+
+        [data-theme="warm"] {
+            --bg-main: #1a1410;
+            --bg-panel: rgba(245, 158, 11, 0.05);
+            --bg-element: rgba(245, 158, 11, 0.1);
+            --bg-hover: rgba(245, 158, 11, 0.18);
+            --bg-active: rgba(245, 158, 11, 0.25);
+            --text-main: #fef3c7;
+            --text-muted: #d97706;
+            --accent: #fbbf24;
+            --accent-hover: #f59e0b;
+            --accent-glow: rgba(251, 191, 36, 0.15);
+            --success: #a3e635;
+            --border: rgba(245, 158, 11, 0.12);
+            --border-light: rgba(245, 158, 11, 0.2);
+        }
+
+        [data-theme="mono"] {
+            --bg-main: #121212;
+            --bg-panel: rgba(255, 255, 255, 0.03);
+            --bg-element: rgba(255, 255, 255, 0.06);
+            --bg-hover: rgba(255, 255, 255, 0.1);
+            --bg-active: rgba(255, 255, 255, 0.15);
+            --text-main: #fafafa;
+            --text-muted: #a1a1aa;
+            --accent: #a1a1aa;
+            --accent-hover: #d4d4d8;
+            --accent-glow: rgba(161, 161, 170, 0.1);
+            --success: #4ade80;
+            --border: rgba(255, 255, 255, 0.05);
+            --border-light: rgba(255, 255, 255, 0.08);
+        }
+
+        [data-theme="mint"] {
+            --bg-main: #052e1a;
+            --bg-panel: rgba(52, 211, 153, 0.05);
+            --bg-element: rgba(52, 211, 153, 0.1);
+            --bg-hover: rgba(52, 211, 153, 0.18);
+            --bg-active: rgba(52, 211, 153, 0.25);
+            --text-main: #ecfdf5;
+            --text-muted: #6ee7b7;
+            --accent: #34d399;
+            --accent-hover: #10b981;
+            --accent-glow: rgba(52, 211, 153, 0.15);
+            --success: #fbbf24;
+            --border: rgba(52, 211, 153, 0.12);
+            --border-light: rgba(52, 211, 153, 0.2);
+        }
+
+        /* ============================================================
+                   RESET & BASE
+                   ============================================================ */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-ar);
+            background: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            transition: background var(--transition), color var(--transition);
+            background-image:
+                radial-gradient(ellipse at 20% 0%, var(--bg-panel) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 100%, var(--bg-panel) 0%, transparent 60%);
+        }
+
+        /* ============================================================
+                   HEADER
+                   ============================================================ */
+        header {
+            background: var(--bg-panel);
+            backdrop-filter: blur(24px) saturate(1.4);
+            -webkit-backdrop-filter: blur(24px) saturate(1.4);
+            border: 1px solid var(--border);
+            padding: 10px 16px;
+            border-radius: var(--radius);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow);
+            transition: all var(--transition);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-icon {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent), var(--success));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-sub {
+            font-size: 0.5rem;
+            color: var(--text-muted);
+            opacity: 0.5;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            -webkit-text-fill-color: var(--text-muted);
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+            font-size: 0.72rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--bg-element);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            font-family: inherit;
+            white-space: nowrap;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            background: var(--bg-hover);
+            box-shadow: var(--shadow-sm);
+        }
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #0a0e1a;
+            border-color: var(--accent);
+        }
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            border-color: var(--accent-hover);
+            box-shadow: 0 0 24px var(--accent-glow);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: #0a0e1a;
+            border-color: var(--success);
+        }
+        .btn-success:hover {
+            background: var(--success-hover);
+            border-color: var(--success-hover);
+            box-shadow: 0 0 24px rgba(52, 211, 153, 0.2);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: #0a0e1a;
+            border-color: var(--danger);
+        }
+        .btn-danger:hover {
+            background: var(--danger-hover);
+            border-color: var(--danger-hover);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border-color: var(--border-light);
+        }
+        .btn-outline:hover {
+            background: var(--bg-element);
+            border-color: var(--border-light);
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, var(--accent), var(--success));
+            color: #0a0e1a;
+            border-color: transparent;
+            font-weight: 700;
+            padding: 6px 16px;
+        }
+        .btn-next:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 0 30px var(--accent-glow);
+        }
+
+        .btn-style {
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            color: #0a0e1a;
+            border-color: transparent;
+            font-weight: 700;
+            padding: 6px 16px;
+        }
+        .btn-style:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
+        }
+
+        /* ===== THEME SELECTOR ===== */
+        .theme-selector {
+            background: var(--bg-element);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 5px 10px;
+            border-radius: var(--radius-full);
+            font-size: 0.7rem;
+            cursor: pointer;
+            outline: none;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            font-family: inherit;
+        }
+        .theme-selector:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+        .theme-selector option {
+            background: var(--bg-main);
+            color: var(--text-main);
+        }
+
+        /* ============================================================
+                   TOOLBAR (شريط الأدوات الأفقي للهواتف)
+                   ============================================================ */
+        .toolbar-scroll {
+            display: flex;
+            gap: 5px;
+            overflow-x: auto;
+            padding: 6px 4px;
+            margin-bottom: 10px;
+            -webkit-overflow-scrolling: touch;
+            scroll-snap-type: x mandatory;
+            background: var(--bg-panel);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 8px 12px;
+        }
+        .toolbar-scroll::-webkit-scrollbar {
+            height: 2px;
+        }
+        .toolbar-scroll::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 10px;
+        }
+
+        .tool-btn-mini {
+            flex: 0 0 auto;
+            padding: 5px 12px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            background: var(--bg-element);
+            color: var(--text-main);
+            font-size: 0.65rem;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all var(--transition);
+            white-space: nowrap;
+            scroll-snap-align: start;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .tool-btn-mini:active {
+            transform: scale(0.94);
+        }
+        .tool-btn-mini:hover {
+            background: var(--bg-hover);
+            border-color: var(--accent);
+        }
+        .tool-btn-mini .icon {
+            font-size: 0.8rem;
+        }
+
+        /* ============================================================
+                   MAIN GRID
+                   ============================================================ */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            flex: 1;
+            min-height: 0;
+        }
+
+        /* ============================================================
+                   EDITOR & PREVIEW
+                   ============================================================ */
+        .editor-area,
+        .preview-area {
+            background: var(--bg-panel);
+            backdrop-filter: blur(24px) saturate(1.4);
+            -webkit-backdrop-filter: blur(24px) saturate(1.4);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow);
+            transition: all var(--transition);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            opacity: 0.6;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .panel-header .stats {
+            display: flex;
+            gap: 8px;
+        }
+        .panel-header .stats span {
+            background: var(--bg-element);
+            padding: 1px 10px;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--border);
+            font-size: 0.6rem;
+        }
+
+        #editor {
+            flex: 1;
+            background: var(--bg-main);
+            color: var(--text-main);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 14px 16px;
+            font-size: 15px;
+            line-height: 1.9;
+            resize: none;
+            outline: none;
+            min-height: 280px;
+            transition: all var(--transition);
+            font-family: var(--font-ar);
+            direction: rtl;
+            text-align: right;
+        }
+
+        #editor:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px var(--accent-glow);
+        }
+        #editor::placeholder {
+            color: var(--text-muted);
+            opacity: 0.3;
+        }
+
+        #previewFrame {
+            flex: 1;
+            background: #ffffff;
+            border: none;
+            border-radius: var(--radius-sm);
+            min-height: 280px;
+            transition: all var(--transition);
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        /* ============================================================
+                   MODAL - GUIDE & POPUPS (مع أنيميشن)
+                   ============================================================ */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-panel);
+            backdrop-filter: blur(40px) saturate(1.6);
+            -webkit-backdrop-filter: blur(40px) saturate(1.6);
+            color: var(--text-main);
+            padding: 28px 32px;
+            border-radius: 20px;
+            max-width: 520px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
+            animation: modalIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.92) translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal-content .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 14px;
+            margin-bottom: 16px;
+        }
+        .modal-content .modal-header h3 {
+            font-size: 1.1rem;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .modal-content .modal-header .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: var(--transition);
+            line-height: 1;
+            padding: 0 4px;
+        }
+        .modal-content .modal-header .close-btn:hover {
+            color: var(--text-main);
+            transform: rotate(90deg);
+        }
+
+        .modal-content .guide-step {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .modal-content .guide-step:last-child {
+            border-bottom: none;
+        }
+        .modal-content .guide-step .step-num {
+            font-weight: 700;
+            color: var(--accent);
+            margin-left: 6px;
+        }
+        .modal-content .guide-step .step-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-top: 2px;
+        }
+        .modal-content .guide-step .step-example {
+            display: inline-block;
+            background: var(--bg-element);
+            padding: 2px 12px;
+            border-radius: 6px;
+            font-family: var(--font-ar);
+            font-size: 0.75rem;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            margin-top: 4px;
+        }
+
+        .modal-content .modal-footer {
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* ===== POPUPS ===== */
+        .popup-content {
+            text-align: center;
+            padding: 10px 0;
+        }
+        .popup-content .big-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            animation: float 2s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        .popup-content .popup-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 6px;
+        }
+        .popup-content .popup-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            line-height: 1.7;
+        }
+        .popup-content .popup-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .popup-content .popup-links a {
+            text-decoration: none;
+        }
+        .popup-content .popup-links .btn-link {
+            padding: 12px 20px;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all var(--transition);
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-family: inherit;
+        }
+        .popup-content .popup-links .btn-link:hover {
+            transform: translateY(-3px) scale(1.02);
+        }
+        .btn-link-wsr {
+            background: linear-gradient(135deg, #60a5fa, #34d399);
+            color: #0a0e1a;
+        }
+        .btn-link-wsr:hover {
+            box-shadow: 0 0 30px rgba(96, 165, 250, 0.3);
+        }
+        .btn-link-style {
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            color: #0a0e1a;
+        }
+        .btn-link-style:hover {
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
+        }
+
+        /* ============================================================
+                   TOAST
+                   ============================================================ */
+        .toast {
+            position: fixed;
+            bottom: 28px;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            background: var(--bg-panel);
+            backdrop-filter: blur(24px) saturate(1.4);
+            -webkit-backdrop-filter: blur(24px) saturate(1.4);
+            color: var(--text-main);
+            padding: 10px 28px;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--border-light);
+            font-size: 0.82rem;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+            z-index: 1100;
+            box-shadow: var(--shadow);
+            font-family: inherit;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ============================================================
+                   FOOTER
+                   ============================================================ */
+        .footer {
+            margin-top: 12px;
+            padding: 8px 16px;
+            text-align: center;
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            opacity: 0.4;
+            letter-spacing: 0.5px;
+            border-top: 1px solid var(--border);
+            transition: var(--transition);
+        }
+        .footer a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        .footer a:hover {
+            color: var(--accent);
+            opacity: 1;
+        }
+
+        /* ============================================================
+                   RESPONSIVE
+                   ============================================================ */
+        @media (max-width: 768px) {
+            body {
+                padding: 6px;
+            }
+
+            header {
+                padding: 8px 12px;
+            }
+            .logo-icon {
+                font-size: 1.2rem;
+            }
+            .logo-sub {
+                font-size: 0.4rem;
+            }
+
+            .main-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: 1fr 1fr;
+                gap: 10px;
+            }
+
+            #editor {
+                min-height: 200px;
+                font-size: 14px;
+                padding: 12px 14px;
+            }
+            #previewFrame {
+                min-height: 200px;
+            }
+
+            .btn {
+                padding: 5px 10px;
+                font-size: 0.65rem;
+            }
+            .theme-selector {
+                padding: 4px 8px;
+                font-size: 0.65rem;
+            }
+
+            .modal-content {
+                padding: 20px;
+                margin: 10px;
+            }
+            .modal-content .guide-step .step-desc {
+                font-size: 0.78rem;
+            }
+            .panel-header .stats span {
+                font-size: 0.55rem;
+                padding: 1px 8px;
+            }
+
+            .footer {
+                font-size: 0.5rem;
+                padding: 6px 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 4px;
+            }
+            header {
+                padding: 6px 10px;
+            }
+            .logo-icon {
+                font-size: 1rem;
+            }
+            .header-controls {
+                gap: 3px;
+            }
+            .btn {
+                padding: 4px 8px;
+                font-size: 0.55rem;
+            }
+            .theme-selector {
+                padding: 3px 6px;
+                font-size: 0.55rem;
+            }
+            #editor {
+                min-height: 140px;
+                font-size: 13px;
+                padding: 10px 12px;
+            }
+            #previewFrame {
+                min-height: 140px;
+            }
+            .modal-content {
+                padding: 16px;
+            }
+            .modal-content .guide-step {
+                padding: 6px 0;
+            }
+            .popup-content .popup-links .btn-link {
+                font-size: 0.85rem;
+                padding: 10px 16px;
+            }
+            .tool-btn-mini {
+                padding: 4px 10px;
+                font-size: 0.55rem;
+            }
+        }
+
+        /* ============================================================
+                   SCROLLBAR
+                   ============================================================ */
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+    HEADER
+    ============================================================ -->
+    <header>
+        <div class="logo">
+            <span class="logo-icon">⚡ TFT</span>
+            <span class="logo-sub" id="logoSub">تحويل إلى HTML</span>
+        </div>
+        <div class="header-controls">
+            <select class="theme-selector" id="themeSelector" onchange="changeTheme(this.value)">
+                <option value="dark">🌙 ليلي</option>
+                <option value="ocean">🌊 محيطي</option>
+                <option value="warm">🔥 دافئ</option>
+                <option value="mono">⬛ أنيق</option>
+                <option value="mint">🌿 نعناعي</option>
+            </select>
+            <button class="btn btn-outline" onclick="toggleLang()" id="langBtn">🇫🇷 FR</button>
+            <button class="btn btn-outline" onclick="toggleGuide(true)" id="guideBtn">📖 دليل</button>
+            <button class="btn btn-danger" onclick="clearEditor()" id="clearBtn">🗑️ مسح</button>
+            <button class="btn btn-primary" onclick="copyHTML()" id="copyBtn">📋 نسخ</button>
+            <button class="btn btn-success" onclick="exportHTML()" id="saveBtn">💾 تحميل</button>
+            <button class="btn btn-next" onclick="openNextPopup()" id="nextBtn">🚀 NEXT</button>
+            <button class="btn btn-style" onclick="openStylePopup()" id="styleBtn">🎨 STYLE</button>
+        </div>
+    </header>
+
+    <!-- ============================================================
+    TOOLBAR (شريط الأدوات الأفقي)
+    ============================================================ -->
+    <div class="toolbar-scroll" id="toolbarScroll">
+        <button class="tool-btn-mini" onclick="convertSelected('h1')"><span class="icon">📌</span> عنوان رئيسي</button>
+        <button class="tool-btn-mini" onclick="convertSelected('h2')"><span class="icon">📌</span> عنوان فرعي</button>
+        <button class="tool-btn-mini" onclick="convertSelected('p')"><span class="icon">📄</span> فقرة</button>
+        <button class="tool-btn-mini" onclick="convertSelected('strong')"><span class="icon">⬛</span> غامق</button>
+        <button class="tool-btn-mini" onclick="convertSelected('em')"><span class="icon">⬜</span> مائل</button>
+        <button class="tool-btn-mini" onclick="convertSelected('ul')"><span class="icon">📋</span> قائمة</button>
+        <button class="tool-btn-mini" onclick="convertSelected('blockquote')"><span class="icon">💬</span> اقتباس</button>
+        <button class="tool-btn-mini" onclick="insertTemplate('[رابط](https://)')"><span class="icon">🔗</span> رابط</button>
+        <button class="tool-btn-mini" onclick="insertTemplate('![صورة](image.jpg)')"><span class="icon">🖼️</span> صورة</button>
+        <button class="tool-btn-mini" onclick="insertTemplate('[زر: اضغط هنا].')"><span class="icon">🔘</span> زر</button>
+        <button class="tool-btn-mini" onclick="insertTemplate('@{فيديو}(video.mp4)')"><span class="icon">🎬</span> فيديو</button>
+        <button class="tool-btn-mini" onclick="insertTemplate('#{صوت}(audio.mp3)')"><span class="icon">🎵</span> صوت</button>
+        <button class="tool-btn-mini" onclick="insertTemplate('\n---\n')"><span class="icon">➖</span> فاصل</button>
+    </div>
+
+    <!-- ============================================================
+    MAIN GRID
+    ============================================================ -->
+    <div class="main-grid">
+
+        <!-- EDITOR -->
+        <div class="editor-area">
+            <div class="panel-header">
+                <span id="editorLabel">✏️ اكتب أو الصق نصك</span>
+                <div class="stats">
+                    <span id="charCount">0 حرف</span>
+                    <span id="wordCount">0 كلمة</span>
+                </div>
+            </div>
+            <textarea id="editor" spellcheck="false" placeholder="اكتب نصك هنا... حدد النص واضغط على الأداة المناسبة">مرحباً بك في TFT_HTML ⚡
+حدد هذا النص واضغط على أي أداة من القائمة لتجربتها فوراً!
+يمكنك أيضاً إدراج روابط، صور، أزرار، فيديو وصوت بسهولة.</textarea>
+        </div>
+
+        <!-- PREVIEW -->
+        <div class="preview-area">
+            <div class="panel-header">
+                <span id="previewLabel">👁️ المعاينة الحية</span>
+                <span id="previewStats">جاهز</span>
+            </div>
+            <iframe id="previewFrame"></iframe>
+        </div>
+
+    </div>
+
+    <!-- ============================================================
+    GUIDE MODAL
+    ============================================================ -->
+    <div class="modal" id="guideModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">📖 دليل الاستخدام</h3>
+                <button class="close-btn" onclick="toggleGuide(false)">✕</button>
+            </div>
+            <div id="modalBody">
+                <div class="guide-step">
+                    <div class="step-num">1️⃣ اكتب نصك</div>
+                    <div class="step-desc">اكتب أي شيء تريده، مثل وثيقة عادية.</div>
+                </div>
+                <div class="guide-step">
+                    <div class="step-num">2️⃣ حدد النص</div>
+                    <div class="step-desc">ظلل النص الذي تريد تنسيقه.</div>
+                </div>
+                <div class="guide-step">
+                    <div class="step-num">3️⃣ اختر الأداة</div>
+                    <div class="step-desc">اضغط على أداة من الشريط (عنوان، غامق، قائمة...).</div>
+                    <div class="step-example">مثال: "مرحباً" ← اضغط "عنوان رئيسي" ← يصبح عنواناً</div>
+                </div>
+                <div class="guide-step">
+                    <div class="step-num">4️⃣ شاهد المعاينة</div>
+                    <div class="step-desc">النتيجة تظهر فوراً في اللوحة اليمنى.</div>
+                </div>
+                <div class="guide-step">
+                    <div class="step-num">5️⃣ التصدير</div>
+                    <div class="step-desc">اضغط "نسخ" لنسخ الكود، أو "تحميل" لتنزيل الملف.</div>
+                </div>
+                <div class="guide-step" style="border-bottom:none;">
+                    <div class="step-num">📁 كيف تفتح ملف HTML؟</div>
+                    <div class="step-desc">
+                        بعد تحميل الملف، ابحث عنه في مجلد "التنزيلات" (Downloads) على هاتفك أو جهازك،
+                        ثم اضغط عليه ليُفتح تلقائياً في المتصفح.<br>
+                        يمكنك أيضاً تسميته بأي اسم، مثلاً <strong>"صفحتي.html"</strong> أو <strong>"page.html"</strong>.
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="toggleGuide(false)" id="closeModalBtn" style="flex:1;justify-content:center;">فهمت ✅</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    NEXT POPUP (WSR88)
+    ============================================================ -->
+    <div class="modal" id="nextModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="color:var(--success);">🚀 NEXT</h3>
+                <button class="close-btn" onclick="closeNextPopup()">✕</button>
+            </div>
+            <div class="popup-content">
+                <div class="big-icon">🌟</div>
+                <div class="popup-title">تابع رحلتك!</div>
+                <div class="popup-desc">
+                    اكتشف المزيد من الأدوات والمشاريع على منصتنا.
+                    <br>
+                    <span style="font-size:0.8rem;opacity:0.6;">انقر على الزر أدناه للانتقال إلى:</span>
+                    <br>
+                    <strong style="color:var(--accent);font-size:1rem;">WSR88 - Write Share Read</strong>
+                </div>
+                <div class="popup-links">
+                    <a href="https://88mc.github.io/WSR88/" target="_blank" rel="noopener noreferrer">
+                        <button class="btn-link btn-link-wsr">
+                            🚀 اذهب إلى WSR88
+                        </button>
+                    </a>
+                </div>
+                <div style="margin-top:12px;font-size:0.7rem;opacity:0.4;">
+                    سيُفتح في علامة تبويب جديدة
+                </div>
+            </div>
+            <div class="modal-footer" style="justify-content:center;">
+                <button class="btn btn-outline" onclick="closeNextPopup()" style="flex:1;justify-content:center;">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    STYLE POPUP (STYLE_ME)
+    ============================================================ -->
+    <div class="modal" id="styleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="color:#8b5cf6;">🎨 STYLE ME</h3>
+                <button class="close-btn" onclick="closeStylePopup()">✕</button>
+            </div>
+            <div class="popup-content">
+                <div class="big-icon">🖌️</div>
+                <div class="popup-title">صمم صفحتك بلمسة أنيقة!</div>
+                <div class="popup-desc">
+                    بعد إنشاء صفحتك بـ TFT_HTML، استخدم STYLE_ME لإضافة اللمسات الجمالية.
+                    <br>
+                    <span style="font-size:0.8rem;opacity:0.6;">اختر الألوان، الحركات، والتأثيرات بسهولة.</span>
+                    <br>
+                    <strong style="color:#8b5cf6;font-size:1rem;">Style Me — محرر CSS البصري</strong>
+                </div>
+                <div class="popup-links">
+                    <a href="https://88mc.github.io/STYLE_ME/" target="_blank" rel="noopener noreferrer">
+                        <button class="btn-link btn-link-style">
+                            🎨 اذهب إلى STYLE_ME
+                        </button>
+                    </a>
+                </div>
+                <div style="margin-top:12px;font-size:0.7rem;opacity:0.4;">
+                    سيُفتح في علامة تبويب جديدة
+                </div>
+            </div>
+            <div class="modal-footer" style="justify-content:center;">
+                <button class="btn btn-outline" onclick="closeStylePopup()" style="flex:1;justify-content:center;">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    TOAST
+    ============================================================ -->
+    <div class="toast" id="toast"></div>
+
+    <!-- ============================================================
+    FOOTER
+    ============================================================ -->
+    <div class="footer">
+        <span id="footerText">
+            © 2026 <a href="mailto:mohamed005cheikh@gmail.com">mohamed005cheikh@gmail.com</a> | by MC
+        </span>
+    </div>
+
+    <!-- ============================================================
+    JAVASCRIPT
+    ============================================================ -->
+    <script>
+        // ============================================================
+        // TRANSLATIONS (AR/FR فقط)
+        // ============================================================
+        const translations = {
+            ar: {
+                title: "TFT_HTML - تحويل النصوص إلى HTML",
+                logoSub: "تحويل إلى HTML",
+                guideBtn: "📖 دليل",
+                copyBtn: "📋 نسخ",
+                saveBtn: "💾 تحميل",
+                clearBtn: "🗑️ مسح",
+                editorLabel: "✏️ اكتب أو الصق نصك",
+                previewLabel: "👁️ المعاينة الحية",
+                previewStats: "جاهز",
+                modalTitle: "📖 دليل الاستخدام",
+                closeModalBtn: "فهمت ✅",
+                footer: "© 2026 mohamed005cheikh@gmail.com | by MC",
+                modalBody: `
+                        <div class="guide-step"><div class="step-num">1️⃣ اكتب نصك</div><div class="step-desc">اكتب أي شيء تريده، مثل وثيقة عادية.</div></div>
+                        <div class="guide-step"><div class="step-num">2️⃣ حدد النص</div><div class="step-desc">ظلل النص الذي تريد تنسيقه.</div></div>
+                        <div class="guide-step"><div class="step-num">3️⃣ اختر الأداة</div><div class="step-desc">اضغط على أداة من الشريط (عنوان، غامق، قائمة...).</div><div class="step-example">مثال: "مرحباً" ← اضغط "عنوان رئيسي" ← يصبح عنواناً</div></div>
+                        <div class="guide-step"><div class="step-num">4️⃣ شاهد المعاينة</div><div class="step-desc">النتيجة تظهر فوراً في اللوحة اليمنى.</div></div>
+                        <div class="guide-step"><div class="step-num">5️⃣ التصدير</div><div class="step-desc">اضغط "نسخ" لنسخ الكود، أو "تحميل" لتنزيل الملف.</div></div>
+                        <div class="guide-step" style="border-bottom:none;"><div class="step-num">📁 كيف تفتح ملف HTML؟</div><div class="step-desc">بعد تحميل الملف، ابحث عنه في مجلد "التنزيلات" (Downloads) على هاتفك أو جهازك، ثم اضغط عليه ليُفتح تلقائياً في المتصفح.<br>يمكنك أيضاً تسميته بأي اسم، مثلاً <strong>"صفحتي.html"</strong> أو <strong>"page.html"</strong>.</div></div>
+                    `,
+                toastText: "✅ تم التعديل بنجاح",
+                toastClear: "🗑️ تم مسح المحتوى",
+                toastCopied: "📋 تم نسخ HTML",
+                toastDownload: "💾 تم تحميل الملف",
+                toastLang: "🇸🇦 تم التبديل للعربية",
+                charLabel: "حرف",
+                wordLabel: "كلمة",
+                selectFirst: "⚠️ حدد نصاً أولاً",
+                clearConfirm: "🗑️ هل أنت متأكد من مسح كل المحتوى؟"
+            },
+            fr: {
+                title: "TFT_HTML - Transformer en HTML",
+                logoSub: "Transformer en HTML",
+                guideBtn: "📖 Guide",
+                copyBtn: "📋 Copier",
+                saveBtn: "💾 Télécharger",
+                clearBtn: "🗑️ Effacer",
+                editorLabel: "✏️ Écrivez ou collez",
+                previewLabel: "👁️ Aperçu",
+                previewStats: "Prêt",
+                modalTitle: "📖 Guide d'utilisation",
+                closeModalBtn: "Compris ✅",
+                footer: "© 2026 mohamed005cheikh@gmail.com | by MC",
+                modalBody: `
+                        <div class="guide-step"><div class="step-num">1️⃣ Saisie</div><div class="step-desc">Écrivez votre texte librement.</div></div>
+                        <div class="guide-step"><div class="step-num">2️⃣ Sélection</div><div class="step-desc">Sélectionnez le texte à formater.</div></div>
+                        <div class="guide-step"><div class="step-num">3️⃣ Appliquer</div><div class="step-desc">Cliquez sur un outil (Titre, Gras, Liste...).</div><div class="step-example">Ex: "Bonjour" → "Titre" → devient un titre</div></div>
+                        <div class="guide-step"><div class="step-num">4️⃣ Aperçu</div><div class="step-desc">Le résultat s'affiche instantanément.</div></div>
+                        <div class="guide-step"><div class="step-num">5️⃣ Exporter</div><div class="step-desc">Copiez le code HTML ou téléchargez le fichier.</div></div>
+                        <div class="guide-step" style="border-bottom:none;"><div class="step-num">📁 Comment ouvrir le fichier HTML ?</div><div class="step-desc">Après le téléchargement, cherchez le fichier dans le dossier "Téléchargements" sur votre téléphone ou ordinateur, puis appuyez dessus pour l'ouvrir automatiquement dans le navigateur.<br>Vous pouvez le nommer comme vous voulez, par exemple <strong>"page.html"</strong>.</div></div>
+                    `,
+                toastText: "✅ Modifié avec succès",
+                toastClear: "🗑️ Contenu effacé",
+                toastCopied: "📋 HTML copié",
+                toastDownload: "💾 Fichier téléchargé",
+                toastLang: "🇫🇷 Changé en Français",
+                charLabel: "car.",
+                wordLabel: "mots",
+                selectFirst: "⚠️ Sélectionnez du texte d'abord",
+                clearConfirm: "🗑️ Voulez-vous effacer tout le contenu ?"
+            }
+        };
+
+        // ============================================================
+        // STATE
+        // ============================================================
+        let currentLang = 'ar';
+        let currentTheme = 'dark';
+        let toastTimer = null;
+
+        // ============================================================
+        // DOM REFS
+        // ============================================================
+        const root = document.getElementById('htmlRoot');
+        const editor = document.getElementById('editor');
+        const previewFrame = document.getElementById('previewFrame');
+        const toast = document.getElementById('toast');
+        const guideModal = document.getElementById('guideModal');
+        const nextModal = document.getElementById('nextModal');
+        const styleModal = document.getElementById('styleModal');
+
+        // ============================================================
+        // LANGUAGE
+        // ============================================================
+        function toggleLang() {
+            currentLang = currentLang === 'ar' ? 'fr' : 'ar';
+            applyLanguage(currentLang);
+            localStorage.setItem('tft_lang', currentLang);
+            showToast(translations[currentLang].toastLang);
+        }
+
+        function applyLanguage(lang) {
+            const t = translations[lang];
+            root.lang = lang;
+            root.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+            document.getElementById('pageTitle').textContent = t.title;
+            document.getElementById('logoSub').textContent = t.logoSub;
+            document.getElementById('guideBtn').textContent = t.guideBtn;
+            document.getElementById('copyBtn').textContent = t.copyBtn;
+            document.getElementById('saveBtn').textContent = t.saveBtn;
+            document.getElementById('clearBtn').textContent = t.clearBtn;
+            document.getElementById('editorLabel').textContent = t.editorLabel;
+            document.getElementById('previewLabel').textContent = t.previewLabel;
+            document.getElementById('previewStats').textContent = t.previewStats;
+            document.getElementById('modalTitle').textContent = t.modalTitle;
+            document.getElementById('closeModalBtn').textContent = t.closeModalBtn;
+            document.getElementById('footerText').textContent = t.footer;
+            document.getElementById('modalBody').innerHTML = t.modalBody;
+
+            document.getElementById('langBtn').textContent = lang === 'ar' ? '🇫🇷 FR' : '🇸🇦 AR';
+
+            updateStats(editor.value);
+        }
+
+        // ============================================================
+        // THEME
+        // ============================================================
+        function changeTheme(theme) {
+            currentTheme = theme;
+            document.documentElement.setAttribute('data-theme', theme);
+            document.getElementById('themeSelector').value = theme;
+            localStorage.setItem('tft_theme', theme);
+        }
+
+        // ============================================================
+        // GUIDE
+        // ============================================================
+        function toggleGuide(show) {
+            guideModal.classList.toggle('active', show);
+            document.body.style.overflow = show ? 'hidden' : '';
+        }
+        guideModal.addEventListener('click', function(e) {
+            if (e.target === this) toggleGuide(false);
+        });
+
+        // ============================================================
+        // POPUPS
+        // ============================================================
+        function openNextPopup() {
+            nextModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeNextPopup() {
+            nextModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        nextModal.addEventListener('click', function(e) {
+            if (e.target === this) closeNextPopup();
+        });
+
+        function openStylePopup() {
+            styleModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeStylePopup() {
+            styleModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        styleModal.addEventListener('click', function(e) {
+            if (e.target === this) closeStylePopup();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                toggleGuide(false);
+                closeNextPopup();
+                closeStylePopup();
+            }
+        });
+
+        // ============================================================
+        // CONVERT SELECTED (بدون ظهور الرموز في HTML)
+        // ============================================================
+        function convertSelected(tag) {
+            const start = editor.selectionStart;
+            const end = editor.selectionEnd;
+            const selected = editor.value.substring(start, end);
+
+            if (!selected) {
+                showToast(translations[currentLang].selectFirst);
+                return;
+            }
+
+            // إزالة أي رموز قديمة من النص المحدد أولاً
+            const cleanSelected = selected.replace(/^(\+{1,4}|\.|'|''|-|>)\s*/, '').replace(/\s*\.\.?$/, '');
+
+            let wrapped = '';
+            switch (tag) {
+                case 'h1':
+                    wrapped = `\n+ ${cleanSelected}.\n`;
+                    break;
+                case 'h2':
+                    wrapped = `\n++ ${cleanSelected}.\n`;
+                    break;
+                case 'p':
+                    wrapped = `\n. ${cleanSelected}.\n`;
+                    break;
+                case 'strong':
+                    wrapped = `'${cleanSelected}'`;
+                    break;
+                case 'em':
+                    wrapped = `''${cleanSelected}''`;
+                    break;
+                case 'ul':
+                    wrapped = `\n- ${cleanSelected}.\n`;
+                    break;
+                case 'blockquote':
+                    wrapped = `\n> ${cleanSelected}..\n`;
+                    break;
+                default:
+                    wrapped = `<${tag}>${cleanSelected}</${tag}>`;
+            }
+
+            editor.value = editor.value.substring(0, start) + wrapped + editor.value.substring(end);
+            editor.focus();
+            editor.selectionStart = editor.selectionEnd = start + wrapped.length;
+            renderPreview();
+            saveToStorage();
+            showToast(translations[currentLang].toastText);
+        }
+
+        // ============================================================
+        // INSERT TEMPLATE
+        // ============================================================
+        function insertTemplate(template) {
+            const start = editor.selectionStart;
+            editor.value = editor.value.substring(0, start) + template + editor.value.substring(start);
+            editor.focus();
+            editor.selectionStart = editor.selectionEnd = start + template.length;
+            renderPreview();
+            saveToStorage();
+            showToast(translations[currentLang].toastText);
+        }
+
+        // ============================================================
+        // CLEAR
+        // ============================================================
+        function clearEditor() {
+            if (confirm(translations[currentLang].clearConfirm)) {
+                editor.value = '';
+                renderPreview();
+                saveToStorage();
+                showToast(translations[currentLang].toastClear);
+            }
+        }
+
+        // ============================================================
+        // PARSER
+        // ============================================================
+        function parseToHTML(input) {
+            let html = input;
+
+            html = html.replace(/^\+\s+(.*?)\./gm, '<h1>$1</h1>');
+            html = html.replace(/^\+\+\s+(.*?)\./gm, '<h2>$1</h2>');
+            html = html.replace(/^\.\s+(.*?)\./gm, '<p>$1</p>');
+            html = html.replace(/'([^']+)'/g, '<strong>$1</strong>');
+            html = html.replace(/''([^']+)''/g, '<em>$1</em>');
+            html = html.replace(/^-\s+(.*?)\./gm, '<ul><li>$1</li></ul>');
+            html = html.replace(/^>\s+(.*?)\.\./gm, '<blockquote>$1</blockquote>');
+            html = html.replace(/!\[(.*?)\]\((.*?)\)/g,
+                '<img src="$2" alt="$1" style="max-width:100%;border-radius:8px;margin:8px 0;">');
+            html = html.replace(/\[(.*?)\]\((.*?)\)/g,
+                '<a href="$2" target="_blank" style="color:#3b82f6;text-decoration:none;">$1</a>');
+            html = html.replace(/\[زر:\s*(.*?)\]\./g,
+                '<button style="background:#0f172a;color:#fff;border:none;padding:10px 24px;border-radius:30px;cursor:pointer;font-weight:600;transition:0.2s;">$1</button>');
+            html = html.replace(/@\{([^}]*)\}\(([^)]*)\)/g,
+                '<video src="$2" controls style="width:100%;border-radius:8px;margin:8px 0;">$1</video>');
+            html = html.replace(/#\{([^}]*)\}\(([^)]*)\)/g,
+                '<audio src="$2" controls style="width:100%;border-radius:8px;margin:8px 0;">$1</audio>');
+            html = html.replace(/^---\s*$/gm, '<hr style="border:2px dashed #cbd5e1;margin:24px 0;">');
+
+            html = html.replace(/<\/ul>\s*<ul>/g, '');
+            html = html.replace(/<\/ol>\s*<ol>/g, '');
+            html = html.replace(/<p>\s*<\/p>/g, '');
+
+            return html;
+        }
+
+        // ============================================================
+        // RENDER PREVIEW
+        // ============================================================
+        function renderPreview() {
+            const text = editor.value;
+            const parsed = parseToHTML(text);
+            const doc = previewFrame.contentDocument || previewFrame.contentWindow.document;
+
+            doc.open();
+            doc.write(`
+                    <!DOCTYPE html>
+                    <html lang="${currentLang}" dir="${currentLang === 'ar' ? 'rtl' : 'ltr'}">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <style>
+                            body {
+                                font-family: ${currentLang === 'ar' ? '"Cairo"' : '"Inter"'}, system-ui, sans-serif;
+                                padding: 24px;
+                                line-height: 1.9;
+                                color: #1e293b;
+                                max-width: 720px;
+                                margin: 0 auto;
+                                background: #ffffff;
+                            }
+                            h1 { color: #0f172a; border-bottom: 2px solid #e9eef2; padding-bottom: 8px; }
+                            h2 { color: #1e293b; margin-top: 24px; }
+                            p { margin: 8px 0; }
+                            blockquote {
+                                border-right: 4px solid #3b82f6;
+                                background: #f8fafc;
+                                padding: 12px 20px;
+                                margin: 16px 0;
+                                border-radius: 8px;
+                            }
+                            img { max-width: 100%; border-radius: 8px; margin: 8px 0; }
+                            button {
+                                background: #0f172a; color: #fff; border: none;
+                                padding: 10px 24px; border-radius: 30px;
+                                cursor: pointer; font-weight: 600;
+                                transition: 0.2s;
+                            }
+                            button:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+                            audio, video { width: 100%; border-radius: 8px; margin: 8px 0; }
+                            ul, ol { margin: 12px 0; padding-right: ${currentLang === 'ar' ? '24px' : '0'};
+                                     padding-left: ${currentLang === 'ar' ? '0' : '24px'}; }
+                            li { margin: 4px 0; }
+                            a { color: #3b82f6; text-decoration: none; }
+                            a:hover { text-decoration: underline; }
+                            hr { border: none; border-top: 2px dashed #cbd5e1; margin: 24px 0; }
+                        </style>
+                    </head>
+                    <body>${parsed}</body>
+                    </html>
+                `);
+            doc.close();
+
+            updateStats(text);
+        }
+
+        // ============================================================
+        // STATS
+        // ============================================================
+        function updateStats(text) {
+            const clean = text.replace(/[+\-.'`>]/g, '').replace(/\s+/g, ' ');
+            const words = clean.trim() ? clean.trim().split(/\s+/).length : 0;
+            const t = translations[currentLang];
+
+            document.getElementById('charCount').textContent = `${text.length} ${t.charLabel}`;
+            document.getElementById('wordCount').textContent = `${words} ${t.wordLabel}`;
+        }
+
+        // ============================================================
+        // STORAGE
+        // ============================================================
+        function saveToStorage() {
+            try { localStorage.setItem('tft_content', editor.value); } catch (_) {}
+        }
+
+        function loadFromStorage() {
+            try {
+                const saved = localStorage.getItem('tft_content');
+                if (saved) editor.value = saved;
+
+                const savedTheme = localStorage.getItem('tft_theme');
+                if (savedTheme) {
+                    currentTheme = savedTheme;
+                    document.documentElement.setAttribute('data-theme', savedTheme);
+                    document.getElementById('themeSelector').value = savedTheme;
+                }
+
+                const savedLang = localStorage.getItem('tft_lang');
+                if (savedLang) {
+                    currentLang = savedLang;
+                    applyLanguage(savedLang);
+                }
+            } catch (_) {}
+        }
+
+        setInterval(saveToStorage, 3000);
+
+        // ============================================================
+        // EXPORT & COPY
+        // ============================================================
+        function exportHTML() {
+            const parsed = parseToHTML(editor.value);
+            const fullDoc = `<!DOCTYPE html>
+        <html lang="${currentLang}" dir="${currentLang === 'ar' ? 'rtl' : 'ltr'}">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>صفحتي - TFT_HTML</title>
+            <style>
+                body {
+                    font-family: ${currentLang === 'ar' ? '"Cairo"' : '"Inter"'}, system-ui, sans-serif;
+                    max-width: 720px;
+                    margin: 40px auto;
+                    padding: 24px;
+                    line-height: 1.9;
+                    color: #1e293b;
+                }
+                h1 { color: #0f172a; border-bottom: 2px solid #e9eef2; padding-bottom: 8px; }
+                h2 { color: #1e293b; margin-top: 24px; }
+                blockquote {
+                    border-right: 4px solid #3b82f6;
+                    background: #f8fafc;
+                    padding: 12px 20px;
+                    margin: 16px 0;
+                    border-radius: 8px;
+                }
+                img { max-width: 100%; border-radius: 8px; margin: 8px 0; }
+                button {
+                    background: #0f172a; color: #fff; border: none;
+                    padding: 10px 24px; border-radius: 30px;
+                    cursor: pointer; font-weight: 600;
+                    transition: 0.2s;
+                }
+                button:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+                audio, video { width: 100%; border-radius: 8px; margin: 8px 0; }
+                ul, ol { margin: 12px 0; ${currentLang === 'ar' ? 'padding-right:24px;' : 'padding-left:24px;'} }
+                a { color: #3b82f6; text-decoration: none; }
+                hr { border: none; border-top: 2px dashed #cbd5e1; margin: 24px 0; }
+            </style>
+        </head>
+        <body>
+            ${parsed}
+        </body>
+        </html>`;
+
+            const blob = new Blob([fullDoc], { type: 'text/html;charset=utf-8' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `صفحتي_${Date.now()}.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            showToast(translations[currentLang].toastDownload);
+        }
+
+        function copyHTML() {
+            const parsed = parseToHTML(editor.value);
+            navigator.clipboard.writeText(parsed).then(() => {
+                showToast(translations[currentLang].toastCopied);
+            }).catch(() => {
+                const ta = document.createElement('textarea');
+                ta.value = parsed;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                showToast(translations[currentLang].toastCopied);
+            });
+        }
+
+        // ============================================================
+        // DRAG & DROP
+        // ============================================================
+        document.querySelectorAll('.tool-btn-mini').forEach(btn => {
+            btn.addEventListener('dragstart', (e) => {
+                const match = btn.getAttribute('onclick')?.match(/convertSelected\('([^']+)'\)/);
+                if (match) e.dataTransfer.setData('text/plain', match[1]);
+            });
+            btn.draggable = true;
+        });
+
+        editor.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            editor.style.borderColor = 'var(--accent)';
+            editor.style.boxShadow = '0 0 0 4px var(--accent-glow)';
+        });
+
+        editor.addEventListener('dragleave', () => {
+            editor.style.borderColor = '';
+            editor.style.boxShadow = '';
+        });
+
+        editor.addEventListener('drop', (e) => {
+            e.preventDefault();
+            editor.style.borderColor = '';
+            editor.style.boxShadow = '';
+            const tag = e.dataTransfer.getData('text/plain');
+            if (tag) {
+                const pos = editor.selectionStart;
+                editor.focus();
+                editor.selectionStart = editor.selectionEnd = pos;
+                convertSelected(tag);
+            }
+        });
+
+        // ============================================================
+        // TOAST
+        // ============================================================
+        function showToast(msg) {
+            toast.textContent = msg;
+            toast.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => toast.classList.remove('show'), 2600);
+        }
+
+        // ============================================================
+        // KEYBOARD SHORTCUTS
+        // ============================================================
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'Enter') {
+                e.preventDefault();
+                exportHTML();
+            }
+            if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+                e.preventDefault();
+                copyHTML();
+            }
+            if (e.ctrlKey && e.shiftKey && e.key === 'E') {
+                e.preventDefault();
+                clearEditor();
+            }
+            if (e.key === 'F1') {
+                e.preventDefault();
+                toggleGuide(!guideModal.classList.contains('active'));
+            }
+        });
+
+        // ============================================================
+        // INIT
+        // ============================================================
+        editor.addEventListener('input', () => {
+            renderPreview();
+            saveToStorage();
+        });
+
+        loadFromStorage();
+        renderPreview();
+
+        console.log('⚡ TFT_HTML - Transform To HTML');
+        console.log('📖 Press F1 for guide');
+        console.log('🎨 5 themes available');
+        console.log('🌍 Language: ' + currentLang.toUpperCase());
+        console.log('🔗 Drag tools onto text to apply formatting');
+        console.log('© 2026 mohamed005cheikh@gmail.com | by MC');
+    </script>
+
+</body>
+</html>
