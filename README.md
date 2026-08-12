@@ -1,43 +1,41 @@
-TFT_HTML
+# TTH · Text To HTML Converter
 
- العربية
+A minimal, elegant, and powerful text-to-HTML converter that transforms plain text into structured web pages using a unique visual markup language.
 
-⚡ TFT_HTML
+**100% Client-Side.** No servers. No data tracking. Everything runs instantly in your browser.
 
-حوّل ملاحظاتك إلى HTML بنقرة واحدة.
+---
 
-✨ كيف تستخدمه؟
+### ✨ Why use this?
+- Write HTML faster without typing complex angle brackets (`< >`).
+- Create structured web content using simple, intuitive symbols (e.g., `+` for headings, `'` for bold).
+- Perfect for students, writers, and developers who want a quick, visual way to generate clean HTML.
 
-1. اكتب نصك
-2. حدد النص
-3. اختر الأداة (عنوان، غامق، قائمة...)
-4. شاهد المعاينة
-5. حمّل الملف
+---
 
-🔗 روابط
+### 🔧 Key Features
+- **🔤 Visual Markup Language:** Use simple symbols like `+`, `++`, `'`, `''`, `-`, and `>` to format your text.
+- **🎨 5 Built-in Themes:** Switch between Dark, Ocean, Warm, Mono, and Mint themes instantly.
+- **🧩 Quick Action Toolbar:** Highlight text and click a button (H1, H2, Bold, List, Quote) to format it.
+- **📁 Export & Copy:** Download your result as a `.html` file or copy the raw HTML to your clipboard.
+- **📱 Fully Responsive:** Works seamlessly on mobile phones, tablets, and desktops.
+- **🖱️ Drag & Drop:** Drag any tool from the toolbar and drop it directly onto selected text.
+- **💾 Auto-Save:** Your work is automatically saved in your browser's local storage.
+- **🌍 Dual Language Support:** Switch between Arabic (AR) and French (FR).
 
-· 🚀 WSR88
-· 🎨 STYLE_ME
+---
 
-© 2026 mohamed005cheikh@gmail.com | by MC
+### 🚀 Quick Start
+1. Type or paste your text into the editor on the left.
+2. Select any text you want to format.
+3. Click one of the tools in the header or the toolbar (e.g., `📌 Heading 1`, `⬛ Bold`).
+4. Watch the live preview update instantly on the right.
+5. Click **"Download"** to save your page or **"Copy"** to get the HTML code.
 
-🇫🇷 Français
+---
 
-⚡ TFT_HTML
+**No signup. No servers. Just pure text-to-HTML magic.**
 
-Transformez vos notes en HTML en un clic.
+---
 
-✨ Comment l'utiliser ?
-
-1. Écrivez votre texte
-2. Sélectionnez le texte
-3. Choisissez l'outil (Titre, Gras, Liste...)
-4. Voyez l'aperçu
-5. Téléchargez le fichier
-
-🔗 Liens
-
-· 🚀 WSR88
-· 🎨 STYLE_ME
-
-© 2026 mohamed005cheikh@gmail.com | by MC
+© 2026 TTH by MC | [mohamed005cheikh@gmail.com](mailto:mohamed005cheikh@gmail.com)
